@@ -1,3 +1,12 @@
 body{
     margin: 4%
 }
+
+.heading{
+    text-align:center;
+    font-size:70px
+}
+
+.buttons{
+    justify-content:center
+}
