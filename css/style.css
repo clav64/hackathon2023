@@ -1,3 +1,13 @@
+
+.heading{
+    text-align:center;
+    font-size:70px
+}
+
+.buttons{
+    justify-content:center
+}
+
 .slider {
     -webkit-appearance: none;
     width: 100%;
