@@ -1,12 +1,26 @@
 body{
-    margin: 4%
+    margin: 4%;
+    background-color: #212529;
+}
+ 
+.heading{
+    color: white;
 }
 
-.heading{
-    text-align:center;
-    font-size:70px
+.topNavBar{
+    color: #6a6d70
 }
 
 .buttons{
     justify-content:center
+}
+
+.timer{
+    border-radius: 1em;
+    padding: 1em;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%)
 }

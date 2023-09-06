@@ -10,9 +10,35 @@
     <title>Target 0</title>
 </head>
 <body>
-    <div class="heading">
-        <h1>Welcome to Target Zero</h1>
-    </div>
+
+    <h2 class="p-3 h2 heading">Target Zero</h2>
+
+    
+    <div class="collapse" id="navbarToggleExternalContent" data-bs-theme="dark">
+        <div class="bg-dark p-4">
+            
+          <ul class="navbar-nav justify-content-end flex-grow-1 pe-3 topNavBar">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="index.html">Zero Timer</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="https://www.mentalhealth.org.uk/explore-mental-health/a-z-topics/work-life-balance" target="_blank">Why Balance is Important (external link)</a>
+            </li>
+            
+          </ul>
+  
+        </div>
+      </div>
+      <nav class="navbar navbar-dark bg-dark">
+        <div class="container-fluid">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+        </div>
+      </nav>
+
+
+
 
     <div class="container timer">
         <!-- put the timer module here -->
@@ -21,12 +47,14 @@
             <div id="sw-time">00:00:00</div>
            
             <!-- CONTROLS -->
-            <input type="button" value="Reset" id="sw-rst" disabled>
-            <input type="button" value="Start Work" id="sw-go" disabled>
+            <input type="button" value="End The Day" id="sw-rst" disabled>
+            <input type="button" value="Begin Working..." id="sw-go" disabled>
           </div>
 
     </div>
-    
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/script.js"></script>
 </body>
 </html>

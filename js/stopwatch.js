@@ -24,7 +24,7 @@ var sw = {
     startWork : () => {
         clearInterval(sw.timer);
       sw.timer = setInterval(sw.tickForward, 1000);
-      sw.ego.value = "Start Life";
+      sw.ego.value = "Switch to Life";
       sw.ego.onclick = sw.startLife;
     },
   
@@ -32,7 +32,7 @@ var sw = {
     startLife : () => {
         clearInterval(sw.timer);
       sw.timer = setInterval(sw.tickBackward, 1000);
-      sw.ego.value = "Start Work";
+      sw.ego.value = "Switch to Work";
       sw.ego.onclick = sw.startWork;
     },
   
