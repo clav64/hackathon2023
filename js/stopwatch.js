@@ -4,10 +4,26 @@ var sw = {
     erst : null,  // html reset button
     ego : null,   // html start/stop button
     timer : null, // timer object
-    now : 0,      // current elapsed time
-  
+    now: 0,      // current elapsed time
+      
     // (B) INITIALIZE
-    init : () => {
+    init: () => {
+
+        // if there is no browser storage available
+        if (typeof (Storage) == "undefined") {
+
+            document.getElementById("body") = "Sorry, this browser is not compatible with the applicaiton.";
+            console.log("No browser storage available. Cannot run.");
+            break;
+
+        }
+        else {
+            // Clear session storage for new session
+            sessionStorage.clear();
+        }
+
+        
+
       // (B1) GET HTML ELEMENTS
       sw.etime = document.getElementById("sw-time");
       sw.erst = document.getElementById("sw-rst");
@@ -52,7 +68,8 @@ var sw = {
       if (hours<10) { hours = "0" + hours; }
       if (mins<10) { mins = "0" + mins; }
       if (secs<10) { secs = "0" + secs; }
-      sw.etime.innerHTML = hours + ":" + mins + ":" + secs;
+        sw.etime.innerHTML = hours + ":" + mins + ":" + secs;
+
     },
 
     tickBackward : () => {
@@ -78,6 +95,25 @@ var sw = {
       if (sw.timer != null) { sw.startLife(); }
       sw.now = -1;
       sw.tickForward();
+    },
+
+    // (G) STORE DATA
+    store: (key, val) => {
+    // Write to localStorage - key val pair
+            let key = key.toString();
+            localStorage.setItem(key, val);   
+    },
+
+    // (H) READ DATA
+    read: (key) => {
+        // Read from localStorage - select entry by key name, return object
+        
+            let data = localStorage.getItem(key);
+            return data;
     }
   };
-  window.addEventListener("load", sw.init);
+window.addEventListener("load", sw.init);
+
+
+
+
