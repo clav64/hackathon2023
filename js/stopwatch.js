@@ -4,8 +4,10 @@ var sw = {
     erst : null,  // html reset button
     ego : null,   // html start/stop button
     timer : null, // timer object
-    now: 0,      // current elapsed time
-      
+    total: 0,      // current elapsed time
+    work: 0,
+    life: 0,
+
     // (B) INITIALIZE
     init: () => {
 
@@ -15,27 +17,35 @@ var sw = {
             document.getElementById("body") = "Sorry, this browser is not compatible with the applicaiton.";
             console.log("No browser storage available. Cannot run.");
             
-            if (sw.read(lastRun) == "undefined") {
-                sw.store(lastRun, Date.now());
-            }
+            
+        }
+
+        // if there is no value stored for lastRun
+        if (sw.read("lastRun") == "undefined" || sw.read("lastRun") == null) {
+
+            // clear the browser storage
+            localStorage.clear();
+
+            // store the time now as the lastRun value
+            sw.store("lastRun", Date.now());
         }
         else {
-            // Clear session storage for new session
-            sessionStorage.clear();
-
             // check if it's a new day
-            let today = Date.now();
+            
+            // get the last run value
+            let lastRun = Number(sw.read("lastRun"));
 
-            let lastRun = sw.read("lastRun");
-
-            if (lastRun >= (Date.now() - 86400000)) {
-
-                // reset stored values if it's a new day
-                //sw.reset();
+            // reset the stored lastRun value if it's been more than 24 hours
+            if (Number((lastRun - Date.now())) >= 86400000) {
+                
+                sw.store("lastRun", Date.now())
+                st.store("total", total);
+                st.store("life", life);
+                st.store("work", work);
 
             }
 
-            sw.store("lastRun", Date.now());
+            
 
         }
 
@@ -59,7 +69,8 @@ var sw = {
     // (C) START WORKING TIME (countup)
     startWork : () => {
         clearInterval(sw.timer);
-      sw.timer = setInterval(sw.tickForward, 1000);
+        
+      sw.timer = setInterval(sw.tickWork, 1000);
       sw.ego.value = "Switch to Life";
       sw.ego.onclick = sw.startLife;
     },
@@ -67,90 +78,44 @@ var sw = {
     // (D) START LIFE TIME (count down)
     startLife : () => {
         clearInterval(sw.timer);
-      sw.timer = setInterval(sw.tickBackward, 1000);
+        
+      sw.timer = setInterval(sw.tickLife, 1000);
       sw.ego.value = "Switch to Work";
       sw.ego.onclick = sw.startWork;
     },
   
-    // (E) TIMER ACTION
-    tickForward : () => {
-      // (E1) CALCULATE HOURS, MINS, SECONDS
-      sw.now++;
-        //let hours = sw.read(workHours), mins = sw.read(workMins), secs = sw.read(workSecs),
-            let hours = 0, mins = 0, secs = 0,
-      remain = sw.now;
-      hours = Math.floor(remain / 3600);
-      remain -= hours * 3600;
-      mins = Math.floor(remain / 60);
-      remain -= mins * 60;
-      secs = remain;
-  
-      // (E2) UPDATE THE DISPLAY TIMER
-      if (hours<10) { hours = "0" + hours; }
-      if (mins<10) { mins = "0" + mins; }
-      if (secs<10) { secs = "0" + secs; }
-        sw.etime.innerHTML = hours + ":" + mins + ":" + secs;
-
-        /*// store work hours
-        sw.store(workHours, hours);
-
-        // store work mins
-        sw.store(workMins, mins);
-
-        // store work secs
-        sw.store(workSecs, secs);*/
+    // (E) TICK
+    tickWork : () => {
+        sw.work++;
+        sw.total++;
+        sw.store("work", sw.work);
+        sw.store("total", sw.total);
+        sw.display;        
     },
 
-    tickBackward : () => {
-        // (E1) CALCULATE HOURS, MINS, SECONDS
-        sw.now--;
-        //let hours = sw.read(lifeHours), mins = sw.read(lifeMins), secs = sw.read(lifeSecs),
-        let hours = 0, mins = 0, secs = 0,
-        remain = sw.now;
-        hours = Math.floor(remain / 3600);
-        remain -= hours * 3600;
-        mins = Math.floor(remain / 60);
-        remain -= mins * 60;
-        secs = remain;
-    
-        // (E2) UPDATE THE DISPLAY TIMER
-        if (hours<10) { hours = "0" + hours; }
-        if (mins<10) { mins = "0" + mins; }
-        if (secs<10) { secs = "0" + secs; }
-        sw.etime.innerHTML = hours + ":" + mins + ":" + secs;
-
-        /*// store life hours
-        sw.store(lifeHours, hours);
-
-        // store life mins
-        sw.store(lifeMins, mins);
-
-        // store life secs
-        sw.store(lifeSecs, secs);*/
+    tickLife : () => {
+        sw.life++;
+        sw.total++;
+        sw.store("life", sw.life);
+        sw.store("total", sw.total);  
+        sw.display;
+        
       },
   
     // (F) RESET
     reset : () => {
       if (sw.timer != null) { sw.startLife(); }
         sw.now = -1;
-        /*// reset work stored values
-        sw.store(workHours, 0);
-        sw.store(workMins, 0);
-        sw.store(workSecs, 0);
+        
 
-        // reset life stored values
-        sw.store(lifeHours, 0);
-        sw.store(lifeMins, 0);
-        sw.store(lifeSecs, 0);*/
-
-      sw.tickForward();
+      sw.tickWork();
     },
 
     // (G) STORE DATA
     store: (storekey, val) => {
     // Write to localStorage - key val pair
-            let key = storekey.toString();
-            localStorage.setItem(storekey, val);   
+        let key = storekey.toString();
+        localStorage.setItem(storekey.toString(), val.toString());   
     },
 
     // (H) READ DATA
@@ -159,6 +124,20 @@ var sw = {
         
             let data = localStorage.getItem(readkey);
             return data;
+    },
+
+    // (H) DISPLAY UPDATE
+    display: () => {
+        let hours = 0, mins = 0, secs = 0, remain = sw.work - sw.life;
+        hours = Math.floor(remain / 3600);
+        remain -= hours * 3600;
+        mins = Math.floor(remain / 60);
+        remain -= mins * 60;
+        secs = remain;
+        if (hours < 10) { hours = "0" + hours; }
+        if (mins < 10) { mins = "0" + mins; }
+        if (secs < 10) { secs = "0" + secs; }
+        sw.etime.innerHTML = hours + ":" + mins + ":" + secs;
     },
   };
 window.addEventListener("load", sw.init);
