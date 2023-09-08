@@ -7,7 +7,7 @@ var sw = {
     now: 0,      // current elapsed time
     timevalue: 1,
     state: null, // current work/living state
-    statusText : null, // html status text
+    
 
     // INITIALIZE
     init: () => {
@@ -23,7 +23,7 @@ var sw = {
         sw.etime = document.getElementById("sw-time");
         sw.erst = document.getElementById("sw-rst");
         sw.ego = document.getElementById("sw-go");
-        sw.statusText = document.getElementById("statusText");
+        
 
         // ENABLE BUTTON CONTROLS
         sw.erst.onclick = sw.reset;
@@ -52,6 +52,8 @@ var sw = {
         clearInterval(sw.timer);
         sw.timer = setInterval(() => sw.tick(true), 1000);
         sw.ego.value = "Switch to Life";
+        document.getElementById("statusText").innerHTML = "<h1>CURRENTLY WORKING</h1>";
+        console.log("changed text");
         sw.ego.onclick = sw.startLife;
     },
 
@@ -60,6 +62,8 @@ var sw = {
         clearInterval(sw.timer);
         sw.timer = setInterval(() => sw.tick(false), 2000);
         sw.ego.value = "Switch to Work";
+        document.getElementById("statusText").innerHTML = "<h1>CURRENTLY LIVING</h1>"
+        console.log("dfiffenejnefjhsdbjhfsdjh");
         sw.ego.onclick = sw.startWork;
     },
 
@@ -69,12 +73,12 @@ var sw = {
         if (forward === true) {
             sw.now = sw.now + sw.timevalue;
             state = true;
-            sw.statusText.value = "CURRENTLY WORKING";
+            
         }
         else {
             sw.now = sw.now - sw.timevalue;
             state = false;
-            sw.statusText.value = "CURRENTLY LIVING";
+            
         }
         if (sw.now < 0) {
             sw.now = 1;
@@ -87,9 +91,9 @@ var sw = {
 
     // RESET
     reset: () => {
-        //if (sw.timer != null) { sw.startLife(); }
+        if (sw.timer != null) { sw.startLife(); }
         sw.now = -1;
-        //sw.tick(true);
+        sw.tick(true);
 
     },
 
@@ -110,7 +114,7 @@ var sw = {
     // UPDATE THE DISPLAY TIMER
     display: () => {
         let hours = 0, mins = 0, secs = 0,
-            remain = sw.now;
+        remain = sw.now;
         hours = Math.floor(remain / 3600);
         remain -= hours * 3600;
         mins = Math.floor(remain / 60);
